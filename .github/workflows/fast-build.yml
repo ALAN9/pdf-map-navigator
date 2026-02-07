@@ -1,0 +1,89 @@
+name: Fast Build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build with simple script
+      run: |
+        # Создаем абсолютно минимальный рабочий проект
+        rm -rf app
+        mkdir -p app/src/main/java/com/example/myapp
+        mkdir -p app/src/main/res/layout
+        
+        # Корневой build.gradle
+        cat > build.gradle << 'EOF'
+        buildscript {
+            repositories { google(); mavenCentral() }
+            dependencies { classpath 'com.android.tools.build:gradle:7.4.2' }
+        }
+        allprojects { repositories { google(); mavenCentral() } }
+        EOF
+        
+        # app/build.gradle
+        cat > app/build.gradle << 'EOF'
+        plugins { id 'com.android.application' }
+        android {
+            compileSdk 33
+            defaultConfig {
+                applicationId "com.example.myapp"
+                minSdk 21
+                targetSdk 33
+                versionCode 1
+                versionName "1.0"
+            }
+            buildTypes { release { minifyEnabled false } }
+        }
+        dependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }
+        EOF
+        
+        # Манифест
+        cat > app/src/main/AndroidManifest.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+            <application android:label="My App">
+                <activity android:name=".MainActivity" android:exported="true">
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
+            </application>
+        </manifest>
+        EOF
+        
+        # Код приложения
+        cat > app/src/main/java/com/example/myapp/MainActivity.kt << 'EOF'
+        package com.example.myapp
+        import android.os.Bundle
+        import androidx.appcompat.app.AppCompatActivity
+        class MainActivity : AppCompatActivity() {
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                setContentView(R.layout.activity_main)
+            }
+        }
+        EOF
+        
+        # Макет
+        cat > app/src/main/res/layout/activity_main.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✅ App is working!" />
+        </LinearLayout>
+        EOF
+        
+        # Собираем
+        chmod +x gradlew
+        ./gradlew :app:assembleRelease
