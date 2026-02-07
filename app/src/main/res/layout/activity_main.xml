@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+    
+    <!-- Карта -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+    
+    <!-- Экран приветствия -->
+    <LinearLayout
+        android:id="@+id/welcomeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🗺️"
+            android:textSize="64sp"
+            android:layout_marginBottom="24dp" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PDF Map Navigator"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Офлайн навигация по картам"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="48dp" />
+        
+        <Button
+            android:id="@+id/btnLoad"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="📁 ЗАГРУЗИТЬ КАРТУ"
+            android:textSize="16sp"
+            android:backgroundTint="#6200EE"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+        
+    </LinearLayout>
+    
+    <!-- Панель координат -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|top"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+        
+        <TextView
+            android:id="@+id/tvCoords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ожидание GPS..."
+            android:padding="16dp"
+            android:textSize="14sp" />
+        
+    </com.google.android.material.card.MaterialCardView>
+    
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
